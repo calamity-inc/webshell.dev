@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>webshell.dev</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/src/desktop.css">
+	<link rel="stylesheet" href="/src/terminal.css">
+</head>
+<body>
+	<div class="desktop">
+		<div class="file" onclick="createTerminal();">Terminal</div>
+		<div class="file" onclick="createWebBrowser();">Web Browser</div>
+		<a href="https://github.com/Sainan/webshell.dev" class="file" target="_blank">Github.lnk</a>
+	</div>
+	<script src="/lib/ace/ace.js"></script>
+	<script src="/src/common.js"></script>
+	<script src="/src/desktop.js"></script>
+	<script src="/src/terminal.js"></script>
+	<script>
+		createTerminal();
+	</script>
+</body>
+</html>

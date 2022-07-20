@@ -1,0 +1,14 @@
+#output, #input
+{
+	margin: 0;
+}
+
+#input input
+{
+	color: inherit;
+	background: inherit;
+	font-family: inherit;
+	border: 0;
+	outline: 0;
+	width: 350px;
+}

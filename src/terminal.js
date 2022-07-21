@@ -1,7 +1,3 @@
-// IT WORKS!
-// -fvisibility=hidden
-// -s EXPORT_NAME=pluto -s WASM=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=_main,_strcpy,_free -s EXPORTED_RUNTIME_METHODS=[\"FS\",\"cwrap\"] -s FS_DEBUG=1
-
 let cwd = "/home/web_user/Desktop";
 
 function addOutput(str)
@@ -121,7 +117,7 @@ function executeCommand()
 		argv = document.querySelector("input").value.split(" ");
 		if(argv[0] == "help")
 		{
-			addLine("C/C++ programs \"installed\" on this system: pluto");
+			addLine("C/C++ programs \"installed\" on this system: pluto, lua");
 			addLine("Commands provided by this console: cd, touch, edit, rm");
 			setInput("");
 			enableInput();

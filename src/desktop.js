@@ -328,13 +328,15 @@ function createWebBrowser()
 
 function createEditor(file)
 {
+	let id = "editor"+Math.random();
+
 	let div = document.createElement("div");
-	div.id = "editor";
+	div.id = id;
 	div.textContent = file.contents;
 
 	let wnd = createWindow("Editor - " + file.getPath(), div);
 
-	let editor = ace.edit("editor");
+	let editor = ace.edit(id);
 	editor.setTheme("ace/theme/monokai");
 	editor.session.setUseWorker(false);
 	editor.session.setMode("ace/mode/lua");

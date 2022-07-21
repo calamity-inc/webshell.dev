@@ -18,17 +18,17 @@ function window_bringToFront(wnd)
 function event_getClientX(e)
 {
 	return "changedTouches" in e
-		? e.changedTouches[0].clientX
-		: e.clientX
-		;
+	? e.changedTouches[0].clientX
+	: e.clientX
+	;
 }
 
 function event_getClientY(e)
 {
 	return "changedTouches" in e
-		? e.changedTouches[0].clientY
-		: e.clientY
-		;
+	? e.changedTouches[0].clientY
+	: e.clientY
+	;
 }
 
 function window_addEventListeners(wnd)
@@ -369,7 +369,7 @@ window.onresize = function()
 			window_clamp(wnd);
 		}
 	});
-}
+};
 
 function desktop_addFile(file)
 {

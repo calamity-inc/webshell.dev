@@ -132,3 +132,8 @@ iframe
 	height: 5px;
 	cursor: se-resize;
 }
+
+.window[data-pre-maximise] .window-resize
+{
+	display: none;
+}

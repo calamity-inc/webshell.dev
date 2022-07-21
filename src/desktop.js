@@ -271,17 +271,17 @@ function createWindow(_title, body)
 	title.textContent = _title;
 	head.appendChild(title);
 
-	let close = document.createElement("span");
-	close.className = "window-close";
-	close.textContent = "X";
-	close.title = "Close";
-	head.appendChild(close);
-
 	let maximise = document.createElement("span");
 	maximise.className = "window-maximise";
 	maximise.textContent = "^";
 	maximise.title = "Maximise";
 	head.appendChild(maximise);
+
+	let close = document.createElement("span");
+	close.className = "window-close";
+	close.textContent = "X";
+	close.title = "Close";
+	head.appendChild(close);
 
 	wnd.appendChild(head);
 

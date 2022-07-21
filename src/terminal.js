@@ -183,6 +183,7 @@ function executeCommand()
 				if(file !== undefined)
 				{
 					dir.removeChild(file);
+					fsExport();
 				}
 			}
 			else

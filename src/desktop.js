@@ -87,6 +87,10 @@ function window_addEventListeners(wnd)
 			e.preventDefault();
 		}
 	};
+	wnd.querySelector(".window-title").ondblclick = function()
+	{
+		window_toggleMaximise(wnd);
+	};
 	wnd.querySelector(".window-maximise").onclick = function()
 	{
 		window_toggleMaximise(wnd);

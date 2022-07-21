@@ -343,6 +343,7 @@ function createEditor(file)
 	editor.session.on("change", function(delta)
 	{
 		editor_getFile(wnd).contents = editor.getValue();
+		fsExport();
 	});
 	editor.focus();
 }
@@ -398,5 +399,34 @@ function desktop_removeFile(file)
 	}
 }
 
+function fsImport(parent, desc)
+{
+	if (desc.type == 0)
+	{
+		fsImportDir(parent.addDir(desc.name), desc.children);
+	}
+	else if (desc.type == 1)
+	{
+		parent.addFile(desc.name, desc.contents);
+	}
+}
+
+function fsImportDir(node, children)
+{
+	children.forEach(desc => fsImport(node, desc));
+}
+
+function fsExport()
+{
+	localStorage.setItem("fs", JSON.stringify(fsRoot.serialise().children));
+}
+
 window.fsRoot = new FsDir(undefined, "");
-fsRoot.addDir("home").addDir("web_user").addDir("Desktop");
+if(localStorage.getItem("fs"))
+{
+	fsImportDir(fsRoot, JSON.parse(localStorage.getItem("fs")));
+}
+else
+{
+	fsRoot.addDir("home").addDir("web_user").addDir("Desktop");
+}

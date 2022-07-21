@@ -39,6 +39,14 @@ class FsNode
 	{
 		return FsNode_isFile(this);
 	}
+
+	serialise()
+	{
+		return {
+			type: this.type,
+			name: this.name,
+		};
+	}
 }
 
 function FsNode_getPath(node)
@@ -141,6 +149,17 @@ class FsDir extends FsNode
 			break;
 		}
 	}
+
+	serialise()
+	{
+		let o = super.serialise();
+		o.children = [];
+		for(let i = 0; i != this.children.length; ++i)
+		{
+			o.children.push(this.children[i].serialise());
+		}
+		return o;
+	}
 }
 
 class FsFile extends FsNode
@@ -152,6 +171,13 @@ class FsFile extends FsNode
 		super(parent, name);
 		this.type = 1;
 		this.contents = contents;
+	}
+
+	serialise()
+	{
+		let o = super.serialise();
+		o.contents = this.contents;
+		return o;
 	}
 }
 

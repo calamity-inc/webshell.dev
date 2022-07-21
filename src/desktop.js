@@ -360,7 +360,7 @@ function editor_getPath(wnd)
 
 function editor_getFile(wnd)
 {
-	return fsRoot.resolvePath(editor_getPath(wnd));
+	return fsRoot.resolveFileAndCreateIfNeeded(editor_getPath(wnd));
 }
 
 window.onresize = function()

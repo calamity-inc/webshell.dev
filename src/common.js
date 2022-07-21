@@ -135,6 +135,21 @@ class FsDir extends FsNode
 		return node;
 	}
 
+	resolveFileAndCreateIfNeeded(path)
+	{
+		let arr = path.split("/");
+		let file = arr[arr.length - 1];
+		let dir = path.substr(0, path.length - file.length);
+
+		dir = this.resolvePath(dir);
+		if(dir === undefined)
+		{
+			return undefined;
+		}
+
+		return dir.addFile(file);
+	}
+
 	removeChild(file)
 	{
 		if (typeof desktop_removeFile == "function"

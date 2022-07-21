@@ -407,6 +407,10 @@ function desktop_addFile(file)
 	div.oncontextmenu = function(e)
 	{
 		let ctx = ctx_create(e);
+		ctx_addOption(ctx, "<b>Open</b>", function()
+		{
+			createEditor(file);
+		});
 		ctx_addOption(ctx, "Delete", function()
 		{
 			file.parent.removeChild(file);
@@ -481,7 +485,7 @@ function ctx_create(e)
 function ctx_addOption(ctx, title, onclick)
 {
 	let div = document.createElement("div");
-	div.textContent = title;
+	div.innerHTML = title;
 	div.onclick = function(e)
 	{
 		onclick(e);

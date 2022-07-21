@@ -145,8 +145,11 @@ class FsDir extends FsNode
 		}
 		for(let i = 0; i != this.children.length; ++i)
 		{
-			this.children.splice(i, 1);
-			break;
+			if(this.children[i] == file)
+			{
+				this.children.splice(i, 1);
+				break;
+			}
 		}
 	}
 

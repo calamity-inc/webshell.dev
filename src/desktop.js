@@ -36,6 +36,10 @@ function window_addEventListeners(wnd)
 	wnd.onmousedown = wnd.ontouchstart = function(e)
 	{
 		window_bringToFront(this);
+		if(!("changedTouches" in e) && e.which != 1)
+		{
+			return;
+		}
 		if(e.target.className == "window-head"
 			|| e.target.className == "window-title"
 			)

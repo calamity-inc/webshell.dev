@@ -216,6 +216,11 @@ function window_getTitle(wnd)
 	return wnd.querySelector(".window-title").textContent;
 }
 
+function window_setTitle(wnd, title)
+{
+	wnd.querySelector(".window-title").textContent = title;
+}
+
 function window_fillScreen(wnd)
 {
 	window_setPos(wnd, 0, 0);

@@ -63,7 +63,7 @@ a.file
 
 .window-title
 {
-	display: inline-block;
+	display: inline-flex;
 	padding: 5px;
 
 	text-overflow: ellipsis;

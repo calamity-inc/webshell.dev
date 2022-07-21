@@ -41,6 +41,16 @@ function window_addEventListeners(wnd)
 			)
 		{
 			let rect = this.getBoundingClientRect();
+			if (window_isMaximised(wnd))
+			{
+				let perc_x = (event_getClientX(e) - rect.x) / rect.width;
+				let perc_y = (event_getClientY(e) - rect.y) / rect.height;
+				window_demaximise(wnd);
+				rect = this.getBoundingClientRect();
+				window_setX(wnd, event_getClientX(e) - (rect.width * perc_x));
+				window_setY(wnd, event_getClientY(e) - (rect.height * perc_y));
+				rect = this.getBoundingClientRect();
+			}
 			dragWnd = this;
 			document.querySelector(".desktop").classList.add("drag");
 			dragX = rect.x - event_getClientX(e);
@@ -198,16 +208,9 @@ function window_fillScreen(wnd)
 
 function window_toggleMaximise(wnd)
 {
-	if (wnd.hasAttribute("data-pre-maximise"))
+	if (window_isMaximised(wnd))
 	{
-		let arr = wnd.getAttribute("data-pre-maximise").split(" ");
-		wnd.removeAttribute("data-pre-maximise");
-		window_setPos(wnd, arr[0], arr[1]);
-		window_setWidth(wnd, arr[2]);
-		window_setHeight(wnd, arr[3]);
-		window_clamp(wnd);
-		wnd.querySelector(".window-maximise").textContent = "^";
-		wnd.querySelector(".window-maximise").title = "Maximise";
+		window_demaximise(wnd);
 	}
 	else
 	{
@@ -217,6 +220,23 @@ function window_toggleMaximise(wnd)
 		wnd.querySelector(".window-maximise").textContent = "v";
 		wnd.querySelector(".window-maximise").title = "Restore Down";
 	}
+}
+
+function window_isMaximised(wnd)
+{
+	return wnd.hasAttribute("data-pre-maximise");
+}
+
+function window_demaximise(wnd)
+{
+	let arr = wnd.getAttribute("data-pre-maximise").split(" ");
+	wnd.removeAttribute("data-pre-maximise");
+	window_setPos(wnd, arr[0], arr[1]);
+	window_setWidth(wnd, arr[2]);
+	window_setHeight(wnd, arr[3]);
+	window_clamp(wnd);
+	wnd.querySelector(".window-maximise").textContent = "^";
+	wnd.querySelector(".window-maximise").title = "Maximise";
 }
 
 function createWindow(_title, body)
@@ -321,7 +341,7 @@ function editor_getFile(wnd)
 window.onresize = function()
 {
 	document.querySelectorAll(".window").forEach(wnd => {
-		if(wnd.hasAttribute("data-pre-maximise"))
+		if(window_isMaximised(wnd))
 		{
 			window_fillScreen(wnd);
 		}

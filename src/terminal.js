@@ -222,6 +222,11 @@ worker.addEventListener("message", function(event)
 		worker.postMessage({ a: "invokeMain", fs: fsRoot, cwd, argv });
 		break;
 
+	case "write":
+		fsRoot.resolveFileAndCreateIfNeeded(event.data.b).contents = event.data.c;
+		fsExport();
+		break;
+
 	case "input":
 		enableInput("?", "program awaits input, press enter to cancel");
 		break;

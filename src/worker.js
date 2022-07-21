@@ -40,7 +40,7 @@ function freePtrArray(prog, arr, len)
 	prog.free(arr);
 }
 
-let loaded_programs = {}, input = "", interrupt_input = false, notify_sab, notify_arr, input_sab, input_arr;
+let loaded_programs = {}, input = "", interrupt_input = false, notify_sab, notify_arr, input_sab, input_arr, modified_files = {};
 
 function loadProgram(name)
 {
@@ -155,22 +155,51 @@ function setupFs(prog, dir)
 
 function finishSetupFs(prog)
 {
-	prog.mod.FS.trackingDelegate['onMovePath'] = function(oldpath, newpath) {
+	prog.mod.FS.trackingDelegate['onMovePath'] = function(oldpath, newpath)
+	{
 		addLine('NOTE: Moved "' + oldpath + '" to "' + newpath + '" but not be synced');
 	};
-	prog.mod.FS.trackingDelegate['onDeletePath'] = function(path) {
+	prog.mod.FS.trackingDelegate['onDeletePath'] = function(path)
+	{
 		addLine('NOTE: Deleted "' + path + '" but not synced');
 	};
-	prog.mod.FS.trackingDelegate['onWriteToFile'] = function(path, bytesWritten) {
-		if(path.substr(0,5)!="/dev/")
+	prog.mod.FS.trackingDelegate['onWriteToFile'] = function(path, bytesWritten)
+	{
+		//if(path.substr(0,5)!="/dev/")
 		{
-			addLine('NOTE: Wrote to file "' + path + '" but not synced');
+			modified_files[path] = true;
 		}
 	};
-	prog.mod.FS.trackingDelegate['onMakeDirectory'] = function(path, mode) {
+	prog.mod.FS.trackingDelegate['onCloseFile'] = function(path)
+	{
+		if(path in modified_files)
+		{
+			let node = prog.mod.FS.lookupPath(path).node;
+			let data = new Uint8Array(node.usedBytes);
+			let stream = prog.mod.FS.open(path, "r");
+			prog.mod.FS.read(stream, data, 0, node.usedBytes, 0);
+
+			let this_function = prog.mod.FS.trackingDelegate['onCloseFile'];
+			prog.mod.FS.trackingDelegate['onCloseFile'] = undefined;
+			prog.mod.FS.close(stream);
+			prog.mod.FS.trackingDelegate['onCloseFile'] = this_function;
+
+			let str = "";
+			for (let i = 0; i != data.length; ++i)
+			{
+				str += String.fromCharCode(data[i]);
+			}
+			postMessage({ a: "write", b: path, c: str });
+
+			delete modified_files[path];
+		}
+	};
+	prog.mod.FS.trackingDelegate['onMakeDirectory'] = function(path, mode)
+	{
 		addLine('NOTE: Created directory ' + resolvePath(prog.mod.FS.cwd(), path) + " but not synced");
 	};
-	prog.mod.FS.trackingDelegate['onMakeSymlink'] = function(oldpath, newpath) {
+	prog.mod.FS.trackingDelegate['onMakeSymlink'] = function(oldpath, newpath)
+	{
 		addLine('NOTE: Created symlink from ' + oldpath + ' to ' + newpath + " but not synced");
 	};
 }

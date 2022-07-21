@@ -1,6 +1,6 @@
 # webshell.dev
 
-A desktop environment to run C/C++ programs directly your browser using WASM.
+A desktop environment to run C/C++ programs directly in your browser using WASM.
 
 ## Compiling Programs
 

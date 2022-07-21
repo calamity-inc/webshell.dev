@@ -152,7 +152,12 @@ function executeCommand()
 		{
 			if(argv.length == 2)
 			{
-				fsRoot.resolvePath(cwd).addFile(argv[1]);
+				let dir = fsRoot.resolvePath(cwd);
+				if(dir.getChild(argv[1]) === undefined)
+				{
+					dir.addFileNocheck(argv[1]);
+					fsExport();
+				}
 			}
 			else
 			{

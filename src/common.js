@@ -87,7 +87,12 @@ class FsDir extends FsNode
 		{
 			return file;
 		}
-		file = new FsFile(this, name, contents);
+		return this.addFileNocheck(name, contents);
+	}
+
+	addFileNocheck(name, contents = "")
+	{
+		let file = new FsFile(this, name, contents);
 		this.children.push(file);
 		if (typeof desktop_addFile == "function"
 			&& this.getPath() == "/home/web_user/Desktop"

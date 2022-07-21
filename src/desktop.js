@@ -402,7 +402,16 @@ function desktop_addFile(file)
 	div.textContent = file.name;
 	div.onclick = function()
 	{
-		createEditor(fsRoot.resolvePath(resolvePath("/home/web_user/Desktop", this.textContent)));
+		createEditor(file);
+	};
+	div.oncontextmenu = function(e)
+	{
+		let ctx = ctx_create(e);
+		ctx_addOption(ctx, "Delete", function()
+		{
+			file.parent.removeChild(file);
+			fsExport();
+		});
 	};
 	document.querySelector(".desktop").appendChild(div);
 }
@@ -455,3 +464,51 @@ else
 {
 	fsRoot.addDir("home").addDir("web_user").addDir("Desktop");
 }
+
+// Context Menu
+
+function ctx_create(e)
+{
+	e.preventDefault();
+
+	let div = document.createElement("div");
+	div.className = "context-menu";
+	div.style.left = e.clientX + "px";
+	div.style.top = e.clientY + "px";
+	return document.querySelector(".desktop").appendChild(div);
+}
+
+function ctx_addOption(ctx, title, onclick)
+{
+	let div = document.createElement("div");
+	div.textContent = title;
+	div.onclick = function(e)
+	{
+		onclick(e);
+		ctx_close();
+	};
+	ctx.appendChild(div);
+}
+
+function ctx_close()
+{
+	let ctx = document.querySelector(".context-menu");
+	if(ctx)
+	{
+		ctx.parentNode.removeChild(ctx);
+	}
+}
+
+window.onmousedown = function(e)
+{
+	let elm = e.target;
+	while (elm && elm.classList)
+	{
+		if(elm.classList.contains("context-menu"))
+		{
+			return;
+		}
+		elm = elm.parentNode;
+	}
+	ctx_close();
+};

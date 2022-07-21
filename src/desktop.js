@@ -133,9 +133,9 @@ function window_setWidth(wnd, width)
 
 function window_setHeight(wnd, height)
 {
-	if(height < 100)
+	if(height < 180)
 	{
-		height = 100;
+		height = 180;
 	}
 	wnd.style.height = height + "px";
 }

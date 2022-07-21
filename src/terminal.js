@@ -122,7 +122,7 @@ function executeCommand()
 		if(argv[0] == "help")
 		{
 			addLine("C/C++ programs \"installed\" on this system: pluto");
-			addLine("Commands provided by this console: cd, touch, nano, rm");
+			addLine("Commands provided by this console: cd, touch, edit, rm");
 			setInput("");
 			enableInput();
 		}
@@ -165,7 +165,7 @@ function executeCommand()
 			setInput("");
 			enableInput();
 		}
-		else if(argv[0] == "nano")
+		else if(argv[0] == "edit" || argv[0] == "nano")
 		{
 			if(argv.length == 2)
 			{

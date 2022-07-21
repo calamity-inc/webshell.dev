@@ -66,12 +66,12 @@ a.file
 	padding: 5px;
 
 	text-overflow: ellipsis;
-	width: calc(100% - 40px);
+	width: calc(100% - 70px);
 	overflow: hidden;
 	white-space: nowrap;
 }
 
-.window-close
+.window-close, .window-maximise
 {
 	font-family: monospace;
 	display: inline-block;
@@ -86,7 +86,12 @@ a.file
 
 .window-close:hover
 {
-	background: #f00;
+	background: rgba(255, 0, 0, 0.8);
+}
+
+.window-maximise:hover
+{
+	background: rgba(0, 0, 0, 0.2);
 }
 
 .window-body

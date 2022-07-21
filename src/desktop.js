@@ -55,6 +55,10 @@ function window_addEventListeners(wnd)
 			e.preventDefault();
 		}
 	};
+	wnd.querySelector(".window-maximise").onclick = function()
+	{
+		window_toggleMaximise(wnd);
+	};
 	wnd.querySelector(".window-close").onclick = function()
 	{
 		window_close(wnd);
@@ -185,6 +189,36 @@ function window_getTitle(wnd)
 	return wnd.querySelector(".window-title").textContent;
 }
 
+function window_fillScreen(wnd)
+{
+	window_setPos(wnd, 0, 0);
+	window_setWidth(wnd, desktop_getWidth());
+	window_setHeight(wnd, desktop_getHeight());
+}
+
+function window_toggleMaximise(wnd)
+{
+	if (wnd.hasAttribute("data-pre-maximise"))
+	{
+		let arr = wnd.getAttribute("data-pre-maximise").split(" ");
+		wnd.removeAttribute("data-pre-maximise");
+		window_setPos(wnd, arr[0], arr[1]);
+		window_setWidth(wnd, arr[2]);
+		window_setHeight(wnd, arr[3]);
+		window_clamp(wnd);
+		wnd.querySelector(".window-maximise").textContent = "^";
+		wnd.querySelector(".window-maximise").title = "Maximise";
+	}
+	else
+	{
+		let rect = wnd.getBoundingClientRect();
+		wnd.setAttribute("data-pre-maximise", [ rect.x, rect.y, rect.width, rect.height ].join(" "));
+		window_fillScreen(wnd);
+		wnd.querySelector(".window-maximise").textContent = "v";
+		wnd.querySelector(".window-maximise").title = "Restore Down";
+	}
+}
+
 function createWindow(_title, body)
 {
 	let wnd = document.createElement("div");
@@ -203,7 +237,14 @@ function createWindow(_title, body)
 	let close = document.createElement("span");
 	close.className = "window-close";
 	close.textContent = "X";
+	close.title = "Close";
 	head.appendChild(close);
+
+	let maximise = document.createElement("span");
+	maximise.className = "window-maximise";
+	maximise.textContent = "^";
+	maximise.title = "Maximise";
+	head.appendChild(maximise);
 
 	wnd.appendChild(head);
 
@@ -279,7 +320,16 @@ function editor_getFile(wnd)
 
 window.onresize = function()
 {
-	document.querySelectorAll(".window").forEach(window_clamp);
+	document.querySelectorAll(".window").forEach(wnd => {
+		if(wnd.hasAttribute("data-pre-maximise"))
+		{
+			window_fillScreen(wnd);
+		}
+		else
+		{
+			window_clamp(wnd);
+		}
+	});
 }
 
 function desktop_addFile(file)

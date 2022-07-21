@@ -191,7 +191,24 @@ function window_clamp(wnd)
 
 function window_close(wnd)
 {
+	let topmost = wnd.classList.contains("topmost");
 	wnd.parentNode.removeChild(wnd);
+	if (topmost)
+	{
+		topmost = undefined;
+		highest_z = 0;
+		document.querySelectorAll(".window").forEach(wnd => {
+			if(wnd.style.zIndex > highest_z)
+			{
+				topmost = wnd;
+				highest_z = wnd.style.zIndex;
+			}
+		});
+		if(topmost !== undefined)
+		{
+			topmost.classList.add("topmost");
+		}
+	}
 }
 
 function window_getTitle(wnd)

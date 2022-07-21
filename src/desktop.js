@@ -114,18 +114,18 @@ function window_setY(wnd, y)
 
 function window_setWidth(wnd, width)
 {
-	if(width < 50)
+	if(width < 100)
 	{
-		width = 50;
+		width = 100;
 	}
 	wnd.style.width = width + "px";
 }
 
 function window_setHeight(wnd, height)
 {
-	if(height < 50)
+	if(height < 100)
 	{
-		height = 50;
+		height = 100;
 	}
 	wnd.style.height = height + "px";
 }

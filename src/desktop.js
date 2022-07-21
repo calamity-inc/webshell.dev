@@ -132,36 +132,46 @@ function window_setPosToCenter(wnd)
 	window_setY(wnd, (document.querySelector(".desktop").clientHeight - wnd.clientHeight) / 2);
 }
 
+function desktop_getWidth()
+{
+	return document.querySelector(".desktop").clientWidth;
+}
+
+function desktop_getHeight()
+{
+	return document.querySelector(".desktop").clientHeight;
+}
+
 function window_clamp(wnd)
 {
 	let rect = wnd.getBoundingClientRect();
 
-	if(wnd.clientWidth > document.querySelector(".desktop").clientWidth)
+	if(wnd.clientWidth > desktop_getWidth())
 	{
 		window_setX(wnd, 0);
-		window_setWidth(wnd, document.querySelector(".desktop").clientWidth);
+		window_setWidth(wnd, desktop_getWidth());
 	}
 	else if(rect.x < 0)
 	{
 		window_setX(wnd, 0);
 	}
-	else if(rect.x + rect.width > document.querySelector(".desktop").clientWidth)
+	else if(rect.x + rect.width > desktop_getWidth())
 	{
-		window_setX(wnd, document.querySelector(".desktop").clientWidth - rect.width);
+		window_setX(wnd, desktop_getWidth() - rect.width);
 	}
 
-	if(wnd.clientHeight > document.querySelector(".desktop").clientHeight)
+	if(wnd.clientHeight > desktop_getHeight())
 	{
 		window_setY(wnd, 0);
-		window_setHeight(wnd, document.querySelector(".desktop").clientHeight);
+		window_setHeight(wnd, desktop_getHeight());
 	}
 	else if(rect.y < 0)
 	{
 		window_setY(wnd, 0);
 	}
-	else if(rect.y + rect.height > document.querySelector(".desktop").clientHeight)
+	else if(rect.y + rect.height > desktop_getHeight())
 	{
-		window_setY(wnd, document.querySelector(".desktop").clientHeight - rect.height);
+		window_setY(wnd, desktop_getHeight() - rect.height);
 	}
 }
 

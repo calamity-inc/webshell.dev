@@ -1,5 +1,10 @@
 let dragWnd, dragX, dragY, resizeWnd, highz = 0;
 
+if(!navigator.userAgentData.mobile)
+{
+	document.querySelector("body").style.overflow = "hidden";
+}
+
 function window_bringToFront(wnd)
 {
 	if(document.querySelector(".topmost"))

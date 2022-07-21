@@ -1,19 +1,37 @@
-let dragWnd, dragX, dragY, resizeWnd, highz = 0;
+// Desktop Management
 
 if(!navigator.userAgentData.mobile)
 {
 	document.querySelector("body").style.overflow = "hidden";
 }
 
-function window_bringToFront(wnd)
+function desktop_getWidth()
 {
-	if(document.querySelector(".topmost"))
-	{
-		document.querySelector(".topmost").classList.remove("topmost");
-	}
-	wnd.classList.add("topmost");
-	wnd.style.zIndex = ++highz;
+	return document.querySelector(".desktop").clientWidth;
 }
+
+function desktop_getHeight()
+{
+	return document.querySelector(".desktop").clientHeight;
+}
+
+window.onresize = function()
+{
+	document.querySelectorAll(".window").forEach(wnd => {
+		if(window_isMaximised(wnd))
+		{
+			window_fillScreen(wnd);
+		}
+		else
+		{
+			window_clamp(wnd);
+		}
+	});
+};
+
+// Window Interactions
+
+let dragWnd, dragX, dragY, resizeWnd, highz = 0;
 
 function event_getClientX(e)
 {
@@ -110,6 +128,18 @@ window.onmouseup = window.ontouchend = function(e)
 	}
 };
 
+// Window API
+
+function window_bringToFront(wnd)
+{
+	if(document.querySelector(".topmost"))
+	{
+		document.querySelector(".topmost").classList.remove("topmost");
+	}
+	wnd.classList.add("topmost");
+	wnd.style.zIndex = ++highz;
+}
+
 function window_setPos(wnd, x, y)
 {
 	window_setX(wnd, x);
@@ -148,16 +178,6 @@ function window_setPosToCenter(wnd)
 {
 	window_setX(wnd, (document.querySelector(".desktop").clientWidth - wnd.clientWidth) / 2);
 	window_setY(wnd, (document.querySelector(".desktop").clientHeight - wnd.clientHeight) / 2);
-}
-
-function desktop_getWidth()
-{
-	return document.querySelector(".desktop").clientWidth;
-}
-
-function desktop_getHeight()
-{
-	return document.querySelector(".desktop").clientHeight;
 }
 
 function window_clamp(wnd)
@@ -311,6 +331,8 @@ function createWindow(_title, body)
 	return wnd;
 }
 
+// Terminal
+
 function createTerminal()
 {
 	let body = document.createElement("div");
@@ -328,12 +350,16 @@ function createTerminal()
 	addLine('Use "help" to get a list of commands.');
 }
 
+// Web Browser
+
 function createWebBrowser()
 {
 	let body = document.createElement("iframe");
 	body.src = "/web/plutolang.github.io/";
 	createWindow("Web Browser", body);
 }
+
+// Editor
 
 function createEditor(file)
 {
@@ -367,19 +393,7 @@ function editor_getFile(wnd)
 	return fsRoot.resolveFileAndCreateIfNeeded(editor_getPath(wnd));
 }
 
-window.onresize = function()
-{
-	document.querySelectorAll(".window").forEach(wnd => {
-		if(window_isMaximised(wnd))
-		{
-			window_fillScreen(wnd);
-		}
-		else
-		{
-			window_clamp(wnd);
-		}
-	});
-};
+// Desktop Files
 
 function desktop_addFile(file)
 {
@@ -407,6 +421,8 @@ function desktop_removeFile(file)
 		}
 	}
 }
+
+// FS State Management
 
 function fsImport(parent, desc)
 {

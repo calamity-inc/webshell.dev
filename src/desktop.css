@@ -67,7 +67,7 @@ a.file
 	padding: 5px;
 
 	text-overflow: ellipsis;
-	width: calc(100% - 35px);
+	width: calc(100% - 40px);
 	overflow: hidden;
 	white-space: nowrap;
 }
@@ -78,8 +78,9 @@ a.file
 	display: inline-block;
 	position: relative;
 	float: right;
-	padding: 5px;
-	min-width: 13px; /* width - padding */
+	padding: 6px;
+	min-width: 16px; /* width - padding */
+	height: calc(100% - 12px);
 	text-align: center;
 	transition: all 250ms;
 }

@@ -118,7 +118,7 @@ function executeCommand()
 		if(argv[0] == "help")
 		{
 			addLine("C/C++ programs \"installed\" on this system: pluto, lua");
-			addLine("Commands provided by this console: cd, touch, edit, rm");
+			addLine("Commands provided by this console: cd, touch, edit, rm, share");
 			setInput("");
 			enableInput();
 		}
@@ -189,6 +189,27 @@ function executeCommand()
 				{
 					dir.removeChild(file);
 					fsExport();
+				}
+			}
+			else
+			{
+				addLine("Expected a parameter.");
+			}
+			setInput("");
+			enableInput();
+		}
+		else if(argv[0] == "share")
+		{
+			if(argv.length == 2)
+			{
+				let file = fsRoot.resolvePath(resolvePath(cwd, argv[1]));
+				if(file !== undefined && FsNode_isFile(file))
+				{
+					addLine("https://webshell.dev/#code=" + encodeURIComponent(file.contents) + "&ext=lua&run=pluto");
+				}
+				else
+				{
+					addLine("No such file.");
 				}
 			}
 			else

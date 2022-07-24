@@ -29,6 +29,22 @@ window.onresize = function()
 	});
 };
 
+function desktop_duelwield(a, b)
+{
+	if(desktop_getWidth() > desktop_getHeight())
+	{
+		let width = (desktop_getWidth() / 2);
+		window_setRect(a, 0, 0, width, desktop_getHeight());
+		window_setRect(b, width, 0, width, desktop_getHeight());
+	}
+	else
+	{
+		let height = (desktop_getHeight() / 2);
+		window_setRect(a, 0, 0, desktop_getWidth(), height);
+		window_setRect(b, 0, height, desktop_getWidth(), height);
+	}
+}
+
 // Window Interactions
 
 let dragWnd, dragX, dragY, resizeWnd, highz = 0;
@@ -148,6 +164,14 @@ function window_bringToFront(wnd)
 	}
 	wnd.classList.add("topmost");
 	wnd.style.zIndex = ++highz;
+}
+
+function window_setRect(wnd, x, y, width, height)
+{
+	window_setX(wnd, x);
+	window_setY(wnd, y);
+	window_setWidth(wnd, width);
+	window_setHeight(wnd, height);
 }
 
 function window_setPos(wnd, x, y)
@@ -352,12 +376,15 @@ function createTerminal()
 	output.id = "output";
 	body.appendChild(output);
 
-	body.innerHTML += '<form onsubmit="return executeCommand();"><pre id="input"><span id="input-prefix">web_user@webshell:~/Desktop#</span> <input type="text"></pre></form>';
+	body.innerHTML += '<form onsubmit="return executeCommand();"><pre id="input"><span id="input-prefix"></span> <input type="text"></pre></form>';
 
-	createWindow("Terminal", body);
+	let wnd = createWindow("Terminal", body);
 
 	addLine("Welcome to the web shell. Everything here is happening in your browser.");
 	addLine('Use "help" to get a list of commands.');
+	enableInput();
+
+	return wnd;
 }
 
 // Web Browser
@@ -391,6 +418,8 @@ function createEditor(file)
 		fsExport();
 	});
 	editor.focus();
+
+	return wnd;
 }
 
 function editor_getPath(wnd)

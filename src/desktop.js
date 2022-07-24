@@ -376,7 +376,7 @@ function createTerminal()
 	output.id = "output";
 	body.appendChild(output);
 
-	body.innerHTML += '<form onsubmit="return executeCommand();"><pre id="input"><span id="input-prefix"></span> <input type="text"></pre></form>';
+	body.innerHTML += '<form onsubmit="return executeCommand();"><pre id="input"><span id="input-prefix"></span> <input type="text" onkeydown="return terminal_onKeyDown(event);"></pre></form>';
 
 	let wnd = createWindow("Terminal", body);
 

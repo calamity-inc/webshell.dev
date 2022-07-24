@@ -1,4 +1,4 @@
-let cwd = "/home/web_user/Desktop";
+let cwd = "/home/web_user/Desktop", lastCommand;
 
 function addOutput(str)
 {
@@ -84,6 +84,18 @@ function setInput(val)
 	document.querySelector("input").value = val;
 }
 
+function terminal_onKeyDown(e)
+{
+	if (e.which == 38) // Arrow up
+	{
+		if (lastCommand)
+		{
+			setInput(lastCommand);
+			e.preventDefault();
+		}
+	}
+}
+
 function executeCommand()
 {
 	disableInput();
@@ -114,6 +126,7 @@ function executeCommand()
 	}
 	else
 	{
+		lastCommand = document.querySelector("input").value;
 		argv = document.querySelector("input").value.split(" ");
 		if(argv[0] == "help")
 		{

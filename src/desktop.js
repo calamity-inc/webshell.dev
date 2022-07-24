@@ -62,19 +62,9 @@ function window_addEventListeners(wnd)
 			|| e.target.className == "window-title"
 			)
 		{
-			let rect = this.getBoundingClientRect();
-			if (window_isMaximised(wnd))
-			{
-				let perc_x = (event_getClientX(e) - rect.x) / rect.width;
-				let perc_y = (event_getClientY(e) - rect.y) / rect.height;
-				window_demaximise(wnd);
-				rect = this.getBoundingClientRect();
-				window_setX(wnd, event_getClientX(e) - (rect.width * perc_x));
-				window_setY(wnd, event_getClientY(e) - (rect.height * perc_y));
-				rect = this.getBoundingClientRect();
-			}
 			dragWnd = this;
 			document.querySelector(".desktop").classList.add("drag");
+			let rect = this.getBoundingClientRect();
 			dragX = rect.x - event_getClientX(e);
 			dragY = rect.y - event_getClientY(e);
 			e.preventDefault();
@@ -105,7 +95,23 @@ window.onmousemove = window.ontouchmove = function(e)
 {
 	if(dragWnd)
 	{
-		window_setPos(dragWnd, dragX + event_getClientX(e), dragY + event_getClientY(e));
+		if (window_isMaximised(dragWnd))
+		{
+			let rect = dragWnd.getBoundingClientRect();
+			let perc_x = (event_getClientX(e) - rect.x) / rect.width;
+			let perc_y = (event_getClientY(e) - rect.y) / rect.height;
+			window_demaximise(dragWnd);
+			rect = dragWnd.getBoundingClientRect();
+			window_setX(dragWnd, event_getClientX(e) - (rect.width * perc_x));
+			window_setY(dragWnd, event_getClientY(e) - (rect.height * perc_y));
+			rect = dragWnd.getBoundingClientRect();
+			dragX = rect.x - event_getClientX(e);
+			dragY = rect.y - event_getClientY(e);
+		}
+		else
+		{
+			window_setPos(dragWnd, dragX + event_getClientX(e), dragY + event_getClientY(e));
+		}
 	}
 	if(resizeWnd)
 	{

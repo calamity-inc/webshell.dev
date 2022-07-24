@@ -36,7 +36,9 @@ if(!is_dir("plutolang.github.io"))
 	passthru("git clone https://github.com/plutolang/plutolang.github.io");
 }
 chdir("plutolang.github.io");
+passthru("git reset HEAD");
 passthru("git pull");
+file_put_contents("docusaurus.config.js", str_replace("baseUrl: '/',", "baseUrl: '/web/plutolang.github.io/',", file_get_contents("docusaurus.config.js")));
 passthru("npm ci");
 passthru("npm run build");
 chdir("..");

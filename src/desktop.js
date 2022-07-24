@@ -470,13 +470,11 @@ function fsExport()
 }
 
 window.fsRoot = new FsDir(undefined, "");
+fsRoot.addDir("home").addDir("web_user").addDir("Desktop");
+fsRoot.addDir("tmp");
 if(localStorage.getItem("fs"))
 {
 	fsImportDir(fsRoot, JSON.parse(localStorage.getItem("fs")));
-}
-else
-{
-	fsRoot.addDir("home").addDir("web_user").addDir("Desktop");
 }
 
 // Context Menu

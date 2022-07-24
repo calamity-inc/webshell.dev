@@ -75,7 +75,12 @@ class FsDir extends FsNode
 
 	addDir(name)
 	{
-		let dir = new FsDir(this, name);
+		let dir = this.getChild(name);
+		if(dir !== undefined)
+		{
+			return dir;
+		}
+		dir = new FsDir(this, name);
 		this.children.push(dir);
 		return dir;
 	}
@@ -179,7 +184,10 @@ class FsDir extends FsNode
 		o.children = [];
 		for(let i = 0; i != this.children.length; ++i)
 		{
-			o.children.push(this.children[i].serialise());
+			if (this.children[i].getPath() != "/tmp")
+			{
+				o.children.push(this.children[i].serialise());
+			}
 		}
 		return o;
 	}

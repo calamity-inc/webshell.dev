@@ -392,7 +392,7 @@ function createTerminal()
 function createWebBrowser()
 {
 	let body = document.createElement("iframe");
-	body.src = "/web/plutolang.github.io/";
+	body.src = "/web/";
 	createWindow("Web Browser", body);
 }
 

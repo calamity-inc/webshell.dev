@@ -130,7 +130,7 @@ function executeCommand()
 		argv = document.querySelector("input").value.split(" ");
 		if(argv[0] == "help")
 		{
-			addLine("C/C++ programs \"installed\" on this system: pluto, plutodev, lua");
+			addLine("C/C++ programs \"installed\" on this system: pluto, lua, pluto0_2_2");
 			addLine("Commands provided by this console: cd, touch, edit, rm, share");
 			setInput("");
 			enableInput();

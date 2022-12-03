@@ -218,7 +218,7 @@ function executeCommand()
 				let file = fsRoot.resolvePath(resolvePath(cwd, argv[1]));
 				if(file !== undefined && FsNode_isFile(file))
 				{
-					addLine("https://webshell.dev/#code=" + encodeURIComponent(file.contents) + "&ext=lua&run=pluto");
+					addLine("https://webshell.dev/#code=" + encodeURIComponent(file.contents) + "&ext=pluto&run=pluto");
 				}
 				else
 				{

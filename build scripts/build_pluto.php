@@ -1,5 +1,5 @@
 <?php
-$clang = "em++ -O3 -flto -std=c++20 -fvisibility=hidden -D PLUTO_ILP_ENABLE";
+$clang = "em++ -O3 -flto -std=c++17 -fvisibility=hidden -D PLUTO_ILP_ENABLE";
 
 // Setup folders
 if(!is_dir("bin"))

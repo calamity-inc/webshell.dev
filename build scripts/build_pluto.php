@@ -1,5 +1,5 @@
 <?php
-$clang = "em++ -O3 -flto -std=c++17 -fvisibility=hidden -D PLUTO_ILP_ENABLE";
+$clang = "em++ -O3 -flto -std=c++17 -fvisibility=hidden -D PLUTO_ILP_ENABLE -D PLUTO_USE_SOUP";
 
 // Setup folders
 if(!is_dir("bin"))
@@ -13,6 +13,14 @@ if(!is_dir("bin/int"))
 
 // Find work
 $files = [];
+foreach(scandir("src/vendor/Soup") as $file)
+{
+	if(substr($file, -4) == ".cpp")
+	{
+		$name = substr($file, 0, -4);
+		array_push($files, "vendor/Soup/".$name);
+	}
+}
 foreach(scandir("src") as $file)
 {
 	if(substr($file, -4) == ".cpp")
@@ -30,8 +38,8 @@ $objects = [];
 foreach($files as $file)
 {
 	echo $file."\n";
-	passthru("$clang -c src/$file.cpp -o bin/int/$file.o");
-	array_push($objects, escapeshellarg("bin/int/$file.o"));
+	passthru("$clang -c src/$file.cpp -o bin/int/".basename($file).".o");
+	array_push($objects, escapeshellarg("bin/int/".basename($file).".o"));
 }
 
 echo "Linking...\n";

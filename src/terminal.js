@@ -40,37 +40,6 @@ function loadProgram(name, callback)
 	worker.postMessage({ a: "loadProgram", b: name });
 }
 
-const PTRSIZE = 4;
-
-function allocateString(prog, str)
-{
-	let ptr = prog.malloc(str.length + 1);
-	prog.strcpy(ptr, str);
-	return ptr;
-}
-
-function allocateStringArray(prog, arr)
-{
-	let u32arr = new Uint32Array(arr.length);
-	for (let i = 0; i != arr.length; ++i)
-	{
-		u32arr[i] = allocateString(prog, arr[i]);
-	}
-	let ptr = prog.malloc(PTRSIZE * arr.length);
-	var heap = new Uint8Array(prog.mod.HEAPU8.buffer, ptr, PTRSIZE * arr.length);
-	heap.set(new Uint8Array(u32arr.buffer));
-	return heap;
-}
-
-function freePtrArray(prog, arr, len)
-{
-	for (let i = 0; i != len; ++i)
-	{
-		prog.free(arr[i]);
-	}
-	prog.free(arr);
-}
-
 let argv, executing = false;
 
 function onExecuteEnd()

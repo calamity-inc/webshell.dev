@@ -8,6 +8,19 @@ function addOutput(str)
 	});
 }
 
+function utf32_to_utf16(c)
+{
+	if (c <= 0xFFFF)
+	{
+		return String.fromCharCode(c);
+	}
+	else
+	{
+		c -= 0x10000;
+		return String.fromCharCode((c >> 10) + 0xD800) + String.fromCharCode((c & 0x3FF) + 0xDC00);
+	}
+}
+
 const PTRSIZE = 4;
 
 function allocateString(prog, str)
@@ -40,7 +53,7 @@ function freePtrArray(prog, arr, len)
 	prog.free(arr);
 }
 
-let loaded_programs = {}, input = "", interrupt_input = false, notify_sab, notify_arr, input_sab, input_arr, modified_files = {};
+let loaded_programs = {}, input = [], interrupt_input = false, notify_sab, notify_arr, input_sab, input_arr, modified_files = {};
 
 function loadProgram(name)
 {
@@ -74,9 +87,44 @@ function loadProgram(name)
 
 	config.preInit = function()
 	{
+		let todo = 0, buf;
 		let out = function(c)
 		{
-			addOutput(String.fromCharCode(c));
+			if (c < 0) // UTF-8 continuation flag?
+			{
+				c = 256 + c;
+				if (todo == 0)
+				{
+					if ((c & 0b01111000) == 0b01110000) // 11110xxx
+					{
+						buf = (c & 0b111);
+						todo = 3;
+					}
+					else if ((c & 0b01110000) == 0b01100000) // 1110xxxx
+					{
+						buf = (c & 0b1111);
+						todo = 2;
+					}
+					else //if ((c & 0b01100000) == 0b01000000) // 110xxxxx
+					{
+						buf = (c & 0b11111);
+						todo = 1;
+					}
+				}
+				else
+				{
+					buf <<= 6;
+					buf |= (c & 0b111111);
+					if (--todo == 0)
+					{
+						addOutput(utf32_to_utf16(buf));
+					}
+				}
+			}
+			else
+			{
+				addOutput(String.fromCharCode(c));
+			}
 		};
 
 		config.FS.init(function()
@@ -94,14 +142,12 @@ function loadProgram(name)
 
 				for (let i = 0; input_arr[i] != 0; ++i)
 				{
-					input += String.fromCharCode(input_arr[i]);
+					input.push(input_arr[i]);
 				}
-
-				noinputisokay = true;
 			}
 
-			let c = input[0].charCodeAt(0);
-			input = input.substr(1);
+			let c = input[0];
+			input.shift();
 			if (c == 3)
 			{
 				return null;
@@ -144,8 +190,7 @@ function setupFs(prog, dir)
 		}
 		else
 		{
-			let data = new Uint8Array(n.contents.length);
-			str2arr(n.contents, data);
+			let data = utf16_to_utf8(n.contents);
 			let stream = prog.mod.FS.open(FsNode_getPath(n), "w+");
 			prog.mod.FS.write(stream, data, 0, data.length, 0);
 			prog.mod.FS.close(stream);

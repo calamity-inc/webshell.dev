@@ -78,16 +78,21 @@ function executeCommand()
 	}
 	if(executing)
 	{
+		let i = 0;
 		if(document.querySelector("input").value.length == 0)
 		{
-			input_arr[document.querySelector("input").value.length + 0] = 3;
+			input_arr[i++] = 3;
 		}
 		else
 		{
-			str2arr(document.querySelector("input").value, input_arr);
-			input_arr[document.querySelector("input").value.length + 0] = 10; /* "\n".charCodeAt(0) */
+			let arr = utf16_to_utf8(document.querySelector("input").value);
+			for (; i != arr.length; ++i)
+			{
+				input_arr[i] = arr[i];
+			}
+			input_arr[i++] = 10; /* "\n".charCodeAt(0) */
 		}
-		input_arr[document.querySelector("input").value.length + 1] = 0;
+		input_arr[i] = 0;
 
 		document.querySelector("input").value = "";
 

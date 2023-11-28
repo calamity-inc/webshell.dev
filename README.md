@@ -2,6 +2,9 @@
 
 A desktop environment to run C/C++ programs directly in your browser using WASM.
 
+> [!NOTE]
+> For the purposes of running Pluto & Lua in the web, [PlutoLang/web](https://github.com/PlutoLang/web) and [PlutoLang/wasm-builds](https://github.com/PlutoLang/wasm-builds) should be better projects.
+
 ## Compiling Programs
 
 No modification to the source is needed, thanks to the great work done by the Emscripten team.
